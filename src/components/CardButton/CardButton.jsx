@@ -1,6 +1,6 @@
 import './CardButton.css';
 
-function CardButton({ children, className, ...props }) {
+export function CardButton({ children, className, ...props }) {
   const cl = 'card-button' + (className ? ' ' + className : '');
 
   return (
@@ -9,5 +9,3 @@ function CardButton({ children, className, ...props }) {
     </button>
   );
 }
-
-export default CardButton;

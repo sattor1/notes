@@ -1,14 +1,23 @@
 import React from 'react';
 import './App.css';
-import { Button } from './components/Button/Button';
+import { LeftPanel } from './components/layouts/LeftPanel/LeftPanel';
+import { Header } from './components/Header/Header';
+import { Body } from './components/layouts/Body/Body';
+import { JournalAddButton } from './components/JournalAddButton/JournalAddButton';
+import { JournalList } from './components/JournalList/JournalList';
 
 function App() {
   return (
-    <>
-      <h1>Title</h1>
-      <p>Description</p>
-      <Button />
-    </>
+    <div className="app">
+      <LeftPanel>
+        <Header />
+        <JournalAddButton />
+        <JournalList />
+      </LeftPanel>
+      <Body>
+        <p>body</p>
+      </Body>
+    </div>
   );
 }
 
