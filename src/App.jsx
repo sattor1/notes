@@ -5,6 +5,7 @@ import { Header } from './components/Header/Header';
 import { Body } from './components/layouts/Body/Body';
 import { JournalAddButton } from './components/JournalAddButton/JournalAddButton';
 import { JournalList } from './components/JournalList/JournalList';
+import { JournalForm } from './components/JournalForm/JournalForm';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <JournalList />
       </LeftPanel>
       <Body>
-        <p>body</p>
+        <JournalForm />
       </Body>
     </div>
   );
