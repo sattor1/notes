@@ -1,3 +1,3 @@
-export const JournalList = () => {
-  return <div>JournalList</div>;
+export const JournalList = ({ children }) => {
+  return <div>{children}</div>;
 };
