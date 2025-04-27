@@ -1,5 +1,6 @@
 import { CardButton } from '../CardButton/CardButton';
 import { JournalItem } from '../JournalItem/JournalItem';
+import './JournalList.css';
 
 export const JournalList = ({ items }) => {
   let list = <p>Записей пока нет, добавьте первую</p>;
@@ -20,5 +21,5 @@ export const JournalList = ({ items }) => {
     ));
   }
 
-  return <div>{list}</div>;
+  return <div className="journal-list">{list}</div>;
 };

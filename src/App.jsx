@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { LeftPanel } from './components/layouts/LeftPanel/LeftPanel';
 import { Header } from './components/Header/Header';
@@ -9,6 +9,24 @@ import { JournalForm } from './components/JournalForm/JournalForm';
 
 function App() {
   const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('notes-data'));
+    if (data) {
+      setItems(
+        data.map((item) => ({
+          ...item,
+          date: new Date(item.date),
+        }))
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (items.length) {
+      localStorage.setItem('notes-data', JSON.stringify(items));
+    }
+  }, [items]);
 
   const addItem = (item) => {
     setItems((oldItems) => [
