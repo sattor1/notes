@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { Button } from '../Button/Button.jsx';
 import styles from './JournalForm.module.css';
 import cn from 'classnames';
@@ -6,13 +6,30 @@ import { formReducer, INITIAL_STATE } from './JournalForm.state.js';
 
 export const JournalForm = ({ onSubmit }) => {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
-  console.log('here', formState);
   const { isValid, isFormReadyToSubmit, values } = formState;
+  const titleRef = useRef();
+  const dateRef = useRef();
+  const textRef = useRef();
+
+  const focusError = (isValid) => {
+    switch (true) {
+      case !isValid.title:
+        titleRef.current.focus();
+        break;
+      case !isValid.date:
+        dateRef.current.focus();
+        break;
+      case !isValid.text:
+        textRef.current.focus();
+        break;
+    }
+  };
 
   useEffect(() => {
     let timerId;
 
     if (!isValid.title || !isValid.text || !isValid.date) {
+      focusError(isValid);
       timerId = setTimeout(() => {
         dispatchForm({ type: 'RESET_VALIDITY' });
       }, 2000);
@@ -25,9 +42,9 @@ export const JournalForm = ({ onSubmit }) => {
   useEffect(() => {
     if (isFormReadyToSubmit) {
       onSubmit(values);
-      dispatchForm({ type: 'RESET_VALUES' });
+      dispatchForm({ type: 'CLEAR' });
     }
-  }, [isFormReadyToSubmit]);
+  }, [isFormReadyToSubmit, values, onSubmit]);
 
   const onChange = (event) => {
     dispatchForm({
@@ -38,9 +55,7 @@ export const JournalForm = ({ onSubmit }) => {
 
   const addJournalItem = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const formProps = Object.fromEntries(formData);
-    dispatchForm({ type: 'SUBMIT', payload: formProps });
+    dispatchForm({ type: 'SUBMIT' });
   };
 
   return (
@@ -49,6 +64,7 @@ export const JournalForm = ({ onSubmit }) => {
         <input
           type="title"
           name="title"
+          ref={titleRef}
           className={cn(styles.input, {
             [styles.invalid]: !isValid.title,
           })}
@@ -65,6 +81,7 @@ export const JournalForm = ({ onSubmit }) => {
           id="date"
           type="date"
           name="date"
+          ref={dateRef}
           className={cn(styles.input, {
             [styles.invalid]: !isValid.date,
           })}
@@ -92,6 +109,7 @@ export const JournalForm = ({ onSubmit }) => {
         name="text"
         cols="30"
         rows="10"
+        ref={textRef}
         className={cn(styles.input, {
           [styles.invalid]: !isValid.text,
         })}
