@@ -3,6 +3,7 @@ import { Button } from '../Button/Button.jsx';
 import styles from './JournalForm.module.css';
 import cn from 'classnames';
 import { formReducer, INITIAL_STATE } from './JournalForm.state.js';
+import { Input } from '../Input/Input.jsx';
 
 export const JournalForm = ({ onSubmit }) => {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
@@ -61,13 +62,12 @@ export const JournalForm = ({ onSubmit }) => {
   return (
     <form className={styles['journal-form']} onSubmit={addJournalItem}>
       <div>
-        <input
+        <Input
           type="title"
           name="title"
+          appearence="title"
+          isValid={isValid.title}
           ref={titleRef}
-          className={cn(styles.input, {
-            [styles.invalid]: !isValid.title,
-          })}
           value={values.title}
           onChange={onChange}
         />
@@ -77,14 +77,12 @@ export const JournalForm = ({ onSubmit }) => {
           <img src="/calendar.svg" alt="Иконка календаря" />
           <span>Дата</span>
         </label>
-        <input
+        <Input
           id="date"
           type="date"
           name="date"
+          isValid={isValid.date}
           ref={dateRef}
-          className={cn(styles.input, {
-            [styles.invalid]: !isValid.date,
-          })}
           value={values.date}
           onChange={onChange}
         />
@@ -95,11 +93,10 @@ export const JournalForm = ({ onSubmit }) => {
           <img src="/folder.svg" alt="Иконка папки" />
           <span>Метки</span>
         </label>
-        <input
+        <Input
           type="text"
           id="tag"
           name="tag"
-          className={styles.input}
           value={values.tag}
           onChange={onChange}
         />
