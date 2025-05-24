@@ -1,3 +1,4 @@
+import { SelectUser } from '../SelectUser/SelectUser';
 import styles from './Header.module.css';
 // import SelectUser from '../SelectUser/SelectUser';
 // import Logo from '../Logo/Logo';
@@ -8,8 +9,8 @@ export function Header() {
   return (
     <>
       {/* <Logo image={logos[0]} /> */}
-      {/* <SelectUser /> */}
       <img className={styles.logo} src="./logo.svg" alt="Логотип журнала" />
+      <SelectUser />
     </>
   );
 }
