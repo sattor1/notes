@@ -6,7 +6,7 @@ import { JournalAddButton } from './components/JournalAddButton/JournalAddButton
 import { JournalList } from './components/JournalList/JournalList';
 import { JournalForm } from './components/JournalForm/JournalForm';
 import { useLocalStorage } from './components/hooks/use-localstorage.hook';
-import { UserContextProvider } from './context/user.context';
+import { UserContext, UserContextProvider } from './context/user.context';
 
 function App() {
   const [items, setItems] = useLocalStorage('notes-data');
@@ -25,10 +25,9 @@ function App() {
     setItems([
       ...mapItems(items),
       {
-        text: item.text,
-        title: item.title,
+        ...item,
         date: new Date(item.date),
-        id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
+        id: items?.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
       },
     ]);
   };

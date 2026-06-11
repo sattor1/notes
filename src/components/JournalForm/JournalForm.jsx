@@ -22,7 +22,7 @@ export const JournalForm = ({ onSubmit }) => {
       case !isValid.date:
         dateRef.current.focus();
         break;
-      case !isValid.text:
+      case !isValid.post:
         textRef.current.focus();
         break;
     }
@@ -47,7 +47,11 @@ export const JournalForm = ({ onSubmit }) => {
       onSubmit(values);
       dispatchForm({ type: 'CLEAR' });
     }
-  }, [isFormReadyToSubmit, values, onSubmit]);
+  }, [isFormReadyToSubmit, values, userId, onSubmit]);
+
+  useEffect(() => {
+    dispatchForm({ type: 'SET_VALUE', payload: { userId } });
+  }, [userId]);
 
   const onChange = (event) => {
     dispatchForm({
@@ -63,7 +67,6 @@ export const JournalForm = ({ onSubmit }) => {
 
   return (
     <form className={styles['journal-form']} onSubmit={addJournalItem}>
-      {userId}
       <div>
         <Input
           type="title"
@@ -106,14 +109,14 @@ export const JournalForm = ({ onSubmit }) => {
       </div>
 
       <textarea
-        name="text"
+        name="post"
         cols="30"
         rows="10"
         ref={textRef}
         className={cn(styles.input, {
-          [styles.invalid]: !isValid.text,
+          [styles.invalid]: !isValid.post,
         })}
-        value={values.text}
+        value={values.post}
         onChange={onChange}
       ></textarea>
 
