@@ -7,9 +7,11 @@ import { JournalList } from './components/JournalList/JournalList';
 import { JournalForm } from './components/JournalForm/JournalForm';
 import { useLocalStorage } from './components/hooks/use-localstorage.hook';
 import { UserContext, UserContextProvider } from './context/user.context';
+import { useState } from 'react';
 
 function App() {
   const [items, setItems] = useLocalStorage('notes-data');
+  const [editItemId, setEditItemId] = useState(null);
 
   const mapItems = (items) => {
     if (!items) {
@@ -21,7 +23,23 @@ function App() {
     }));
   };
 
+  const editState = editItemId
+    ? mapItems(items).find((item) => item.id === editItemId)
+    : null;
+
   const addItem = (item) => {
+    if (editItemId) {
+      setItems([
+        ...mapItems(items).map((i) =>
+          i.id === editItemId
+            ? { ...item, date: new Date(item.date), id: editItemId }
+            : i,
+        ),
+      ]);
+      setEditItemId(null);
+      return;
+    }
+
     setItems([
       ...mapItems(items),
       {
@@ -37,11 +55,11 @@ function App() {
       <div className="app">
         <LeftPanel>
           <Header />
-          <JournalAddButton />
-          <JournalList items={mapItems(items)} />
+          <JournalAddButton onClick={() => setEditItemId(null)} />
+          <JournalList items={mapItems(items)} setEditItemId={setEditItemId} />
         </LeftPanel>
         <Body>
-          <JournalForm onSubmit={addItem} />
+          <JournalForm editState={editState} onSubmit={addItem} />
         </Body>
       </div>
     </UserContextProvider>

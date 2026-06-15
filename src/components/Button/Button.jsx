@@ -1,9 +1,9 @@
 import './Button.css';
 
-export const Button = ({ onClick }) => {
+export const Button = ({ children, onClick }) => {
   return (
     <button className="button accent" onClick={onClick}>
-      Сохранить
+      {children}
     </button>
   );
 };

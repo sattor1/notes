@@ -6,7 +6,7 @@ import { formReducer, INITIAL_STATE } from './JournalForm.state.js';
 import { Input } from '../Input/Input.jsx';
 import { UserContext } from '../../context/user.context';
 
-export const JournalForm = ({ onSubmit }) => {
+export const JournalForm = ({ editState, onSubmit }) => {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
   const { isValid, isFormReadyToSubmit, values } = formState;
   const titleRef = useRef();
@@ -27,6 +27,35 @@ export const JournalForm = ({ onSubmit }) => {
         break;
     }
   };
+
+  useEffect(() => {
+    if (editState) {
+      const state = {
+        ...editState,
+        date: editState.date
+          ? new Intl.DateTimeFormat('ru-RU')
+              .format(editState.date)
+              .split('.')
+              .reverse()
+              .join('-')
+          : '',
+      };
+
+      titleRef.current.value = state.title;
+      dateRef.current.value = state.date;
+      textRef.current.value = state.post;
+
+      dispatchForm({
+        type: 'SET_VALUE',
+        payload: state,
+      });
+    } else {
+      titleRef.current.value = '';
+      dateRef.current.value = '';
+      textRef.current.value = '';
+      dispatchForm({ type: 'CLEAR' });
+    }
+  }, [editState]);
 
   useEffect(() => {
     let timerId;
@@ -120,7 +149,7 @@ export const JournalForm = ({ onSubmit }) => {
         onChange={onChange}
       ></textarea>
 
-      <Button />
+      <Button>Сохранить</Button>
     </form>
   );
 };

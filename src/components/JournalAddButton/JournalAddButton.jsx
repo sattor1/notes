@@ -1,9 +1,9 @@
 import { CardButton } from '../CardButton/CardButton';
 import './JournalAddButton.css';
 
-export const JournalAddButton = () => {
+export const JournalAddButton = ({ onClick }) => {
   return (
-    <CardButton className="journal-add">
+    <CardButton className="journal-add" onClick={onClick}>
       <svg
         width="20"
         height="21"
