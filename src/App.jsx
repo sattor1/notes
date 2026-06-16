@@ -23,9 +23,12 @@ function App() {
     }));
   };
 
-  const editState = editItem
-    ? mapItems(items).find((item) => item.id === editItem.id)
-    : null;
+  const deleteItem = (item) => {
+    if (item) {
+      setItems(mapItems(items).filter((i) => i.id !== item.id));
+      setEditItem(null);
+    }
+  };
 
   const addItem = (item) => {
     if (editItem) {
@@ -59,7 +62,11 @@ function App() {
           <JournalList items={mapItems(items)} setEditItem={setEditItem} />
         </LeftPanel>
         <Body>
-          <JournalForm editState={editState} onSubmit={addItem} />
+          <JournalForm
+            editItem={editItem}
+            onSubmit={addItem}
+            deleteItem={deleteItem}
+          />
         </Body>
       </div>
     </UserContextProvider>

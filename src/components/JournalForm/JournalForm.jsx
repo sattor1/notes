@@ -5,8 +5,9 @@ import cn from 'classnames';
 import { formReducer, INITIAL_STATE } from './JournalForm.state.js';
 import { Input } from '../Input/Input.jsx';
 import { UserContext } from '../../context/user.context';
+import Logo from '../Logo/Logo.jsx';
 
-export const JournalForm = ({ editState, onSubmit }) => {
+export const JournalForm = ({ editItem, onSubmit, deleteItem }) => {
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE);
   const { isValid, isFormReadyToSubmit, values } = formState;
   const titleRef = useRef();
@@ -29,15 +30,15 @@ export const JournalForm = ({ editState, onSubmit }) => {
   };
 
   useEffect(() => {
-    if (editState) {
+    if (editItem) {
       dispatchForm({
         type: 'SET_VALUE',
-        payload: { ...editState },
+        payload: { ...editItem },
       });
     } else {
       dispatchForm({ type: 'CLEAR' });
     }
-  }, [editState]);
+  }, [editItem]);
 
   useEffect(() => {
     let timerId;
@@ -55,9 +56,8 @@ export const JournalForm = ({ editState, onSubmit }) => {
 
   useEffect(() => {
     if (isFormReadyToSubmit) {
-      onSubmit(values);
+      onSubmit({ ...values, userId });
       dispatchForm({ type: 'CLEAR' });
-      dispatchForm({ type: 'SET_VALUE', payload: { userId } });
     }
   }, [isFormReadyToSubmit, values, userId, onSubmit]);
 
@@ -77,9 +77,15 @@ export const JournalForm = ({ editState, onSubmit }) => {
     dispatchForm({ type: 'SUBMIT' });
   };
 
+  const deleteJournalItem = () => {
+    deleteItem(values);
+    dispatchForm({ type: 'CLEAR' });
+    dispatchForm({ type: 'SET_VALUE', payload: { userId } });
+  };
+
   return (
     <form className={styles['journal-form']} onSubmit={addJournalItem}>
-      <div>
+      <div className={styles['form-label']}>
         <Input
           type="title"
           name="title"
@@ -88,6 +94,12 @@ export const JournalForm = ({ editState, onSubmit }) => {
           ref={titleRef}
           value={values.title}
           onChange={onChange}
+        />
+
+        <Logo
+          image="/archive.svg"
+          className={styles.delete}
+          onClick={deleteJournalItem}
         />
       </div>
       <div className={styles['form-row']}>
