@@ -30,29 +30,11 @@ export const JournalForm = ({ editState, onSubmit }) => {
 
   useEffect(() => {
     if (editState) {
-      const state = {
-        ...editState,
-        date: editState.date
-          ? new Intl.DateTimeFormat('ru-RU')
-              .format(editState.date)
-              .split('.')
-              .reverse()
-              .join('-')
-          : '',
-      };
-
-      titleRef.current.value = state.title;
-      dateRef.current.value = state.date;
-      textRef.current.value = state.post;
-
       dispatchForm({
         type: 'SET_VALUE',
-        payload: state,
+        payload: { ...editState },
       });
     } else {
-      titleRef.current.value = '';
-      dateRef.current.value = '';
-      textRef.current.value = '';
       dispatchForm({ type: 'CLEAR' });
     }
   }, [editState]);
@@ -75,6 +57,7 @@ export const JournalForm = ({ editState, onSubmit }) => {
     if (isFormReadyToSubmit) {
       onSubmit(values);
       dispatchForm({ type: 'CLEAR' });
+      dispatchForm({ type: 'SET_VALUE', payload: { userId } });
     }
   }, [isFormReadyToSubmit, values, userId, onSubmit]);
 
@@ -118,7 +101,9 @@ export const JournalForm = ({ editState, onSubmit }) => {
           name="date"
           isValid={isValid.date}
           ref={dateRef}
-          value={values.date}
+          value={
+            values.date ? new Date(values.date).toISOString().slice(0, 10) : ''
+          }
           onChange={onChange}
         />
       </div>

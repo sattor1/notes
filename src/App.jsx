@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 function App() {
   const [items, setItems] = useLocalStorage('notes-data');
-  const [editItemId, setEditItemId] = useState(null);
+  const [editItem, setEditItem] = useState(null);
 
   const mapItems = (items) => {
     if (!items) {
@@ -23,20 +23,20 @@ function App() {
     }));
   };
 
-  const editState = editItemId
-    ? mapItems(items).find((item) => item.id === editItemId)
+  const editState = editItem
+    ? mapItems(items).find((item) => item.id === editItem.id)
     : null;
 
   const addItem = (item) => {
-    if (editItemId) {
+    if (editItem) {
       setItems([
         ...mapItems(items).map((i) =>
-          i.id === editItemId
-            ? { ...item, date: new Date(item.date), id: editItemId }
+          i.id === editItem.id
+            ? { ...item, date: new Date(item.date), id: editItem.id }
             : i,
         ),
       ]);
-      setEditItemId(null);
+      setEditItem(null);
       return;
     }
 
@@ -55,8 +55,8 @@ function App() {
       <div className="app">
         <LeftPanel>
           <Header />
-          <JournalAddButton onClick={() => setEditItemId(null)} />
-          <JournalList items={mapItems(items)} setEditItemId={setEditItemId} />
+          <JournalAddButton onClick={() => setEditItem(null)} />
+          <JournalList items={mapItems(items)} setEditItem={setEditItem} />
         </LeftPanel>
         <Body>
           <JournalForm editState={editState} onSubmit={addItem} />
