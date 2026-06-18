@@ -78,9 +78,8 @@ export const JournalForm = ({ editItem, onSubmit, deleteItem }) => {
   };
 
   const deleteJournalItem = () => {
-    deleteItem(values);
+    deleteItem({ ...values, userId });
     dispatchForm({ type: 'CLEAR' });
-    dispatchForm({ type: 'SET_VALUE', payload: { userId } });
   };
 
   return (
@@ -96,11 +95,13 @@ export const JournalForm = ({ editItem, onSubmit, deleteItem }) => {
           onChange={onChange}
         />
 
-        <Logo
-          image="/archive.svg"
-          className={styles.delete}
-          onClick={deleteJournalItem}
-        />
+        {editItem && (
+          <Logo
+            image="/archive.svg"
+            className={styles.delete}
+            onClick={deleteJournalItem}
+          />
+        )}
       </div>
       <div className={styles['form-row']}>
         <label htmlFor="date" className={styles['form-label']}>
